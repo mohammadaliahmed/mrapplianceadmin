@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +27,10 @@ import com.appsinventiv.mrapplianceadmin.R;
 import com.appsinventiv.mrapplianceadmin.Utils.CommonUtils;
 import com.appsinventiv.mrapplianceadmin.Utils.CompressImage;
 import com.appsinventiv.mrapplianceadmin.Utils.GifSizeFilter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -292,7 +296,7 @@ public class AddServicemen extends AppCompatActivity {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        StorageReference riversRef = mStorageRef.child("Photos").child(imgName);
+        final StorageReference riversRef = mStorageRef.child("Photos").child(imgName);
 
         riversRef.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -300,17 +304,21 @@ public class AddServicemen extends AppCompatActivity {
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("Servicemen")
-                                .child(id)
-                                .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
-                            public void onSuccess(Void aVoid) {
-                                CommonUtils.showToast("Updated");
-                                wholeLayout.setVisibility(View.GONE);
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                String downloadUrl = task.getResult().toString();
+                                mDatabase.child("Servicemen")
+                                        .child(id)
+                                        .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        CommonUtils.showToast("Updated");
+                                        wholeLayout.setVisibility(View.GONE);
+                                    }
+                                });
                             }
                         });
-
 
                     }
                 })

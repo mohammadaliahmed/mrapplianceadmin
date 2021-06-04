@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.appsinventiv.mrapplianceadmin.Activities.MapsActivity;
 import com.appsinventiv.mrapplianceadmin.Activities.Orders.ViewOrder;
 import com.appsinventiv.mrapplianceadmin.Adapters.TimeslotsAdapter;
 import com.appsinventiv.mrapplianceadmin.Models.OrderModel;
@@ -30,6 +33,8 @@ import com.appsinventiv.mrapplianceadmin.R;
 import com.appsinventiv.mrapplianceadmin.Services.ServiceModel;
 import com.appsinventiv.mrapplianceadmin.Services.SubServiceModel;
 import com.appsinventiv.mrapplianceadmin.Utils.CommonUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,6 +77,10 @@ public class CustomOrderActivity extends AppCompatActivity {
     private String timeSelected;
     private String serviceName;
     private String getValue;
+    RelativeLayout chooseLocation;
+    private double lng;
+    private double lat;
+    TextView addresss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +96,22 @@ public class CustomOrderActivity extends AppCompatActivity {
 
         createOrder = findViewById(R.id.createOrder);
         wholeLayout = findViewById(R.id.wholeLayout);
+        chooseLocation = findViewById(R.id.chooseLocation);
         name = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
+        addresss = findViewById(R.id.addresss);
         address = findViewById(R.id.address);
         residential = findViewById(R.id.residential);
         commercial = findViewById(R.id.commercial);
         villa = findViewById(R.id.villa);
         getOrderCountFromDB();
+        chooseLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CustomOrderActivity.this, MapsActivity.class);
+                startActivityForResult(i, 1);
+            }
+        });
 
         createOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,7 +224,7 @@ public class CustomOrderActivity extends AppCompatActivity {
                 name.getText().toString().replace(" ", "") + "@gmail.com",
                 phone.getText().toString(),
                 phone.getText().toString(),
-                address.getText().toString(),
+                CommonUtils.getFullAddress(CustomOrderActivity.this, lat, lng),
                 "",
                 System.currentTimeMillis(),
                 true
@@ -233,7 +251,8 @@ public class CustomOrderActivity extends AppCompatActivity {
                         user.getAddress(),
                         buildingType,
                         serviceName,
-                        serviceId, true
+                        serviceId, true, lat, lng
+
 
                 );
                 mDatabase.child("Orders").child("" + orderId).setValue(model);
@@ -335,6 +354,24 @@ public class CustomOrderActivity extends AppCompatActivity {
         timeList.add("7:00 pm");
         timeList.add("8:00 pm");
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                lat = extras.getDouble("lat");
+                lng = extras.getDouble("lon");
+
+                addresss.setText("Address: " + (lat == 0 ? "" : CommonUtils.getFullAddress(CustomOrderActivity.this, lat, lng)));
+                address.setText("Address: " + (lat == 0 ? "" : CommonUtils.getFullAddress(CustomOrderActivity.this, lat, lng)));
+
+
+            }
+
+        }
     }
 
     private void getServicesFromDB() {

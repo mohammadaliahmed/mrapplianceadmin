@@ -30,10 +30,8 @@ public class OrderModel {
     String cancelReason;
     int tax;
     String serviceId;
-    double endJourneyLat,endJourneyLng,startJourneyLat,startJourneyLng;
+    double endJourneyLat, endJourneyLng, startJourneyLat, startJourneyLng;
     ArrayList<String> orderImages;
-
-
 
 
     boolean assigned;
@@ -49,9 +47,6 @@ public class OrderModel {
     boolean rated;
 
 
-
-
-
     public OrderModel(long orderId,
                       long time,
                       User user,
@@ -63,7 +58,7 @@ public class OrderModel {
                       String orderAddress,
                       String buildingType,
                       String serviceName,
-                      String serviceId, boolean customOrder) {
+                      String serviceId, boolean customOrder, double lat, double lon) {
         this.orderId = orderId;
         this.time = time;
         this.user = user;
@@ -71,6 +66,8 @@ public class OrderModel {
         this.totalPrice = totalPrice;
         this.date = date;
         this.chosenTime = chosenTime;
+        this.lat = lat;
+        this.lon = lon;
         this.orderStatus = orderStatus;
         this.orderAddress = orderAddress;
         this.serviceId = serviceId;

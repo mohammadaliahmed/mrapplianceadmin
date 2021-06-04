@@ -2,6 +2,8 @@ package com.appsinventiv.mrapplianceadmin.Utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -12,11 +14,13 @@ import android.widget.Toast;
 
 import com.appsinventiv.mrapplianceadmin.ApplicationClass;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -48,7 +52,21 @@ public class CommonUtils {
         return DateFormat.format("dd MMM yyy", smsTime).toString();
 
     }
+    public static String getFullAddress(Context context, Double lat, Double lon) {
+        String address = "";
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(lat, lon, 1);
 
+            address = addresses.get(0).getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return address;
+    }
     public static String getTimeOnly(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeInMillis(smsTimeInMilis);

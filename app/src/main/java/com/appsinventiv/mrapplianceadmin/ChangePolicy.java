@@ -270,14 +270,14 @@ public class ChangePolicy extends AppCompatActivity {
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        mDatabase.child("PDFs").child(key).setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                CommonUtils.showToast("Updated");
-                                wholeLayout.setVisibility(View.GONE);
-                            }
-                        });
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                        mDatabase.child("PDFs").child(key).setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                CommonUtils.showToast("Updated");
+//                                wholeLayout.setVisibility(View.GONE);
+//                            }
+//                        });
 
 
                     }

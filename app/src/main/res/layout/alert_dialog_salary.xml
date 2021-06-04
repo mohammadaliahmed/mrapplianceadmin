@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:text="Add Salary"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/pickDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="10dp"
+            android:text="Pick Date"
+            android:textColor="#000"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="10dp"
+            android:background="#aaa" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2.1">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/amount"
+                    android:hint="Gross Salary"
+                    android:inputType="number"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.1"
+                android:background="#000" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/deduction"
+                    android:hint="Deductions"
+                    android:inputType="number"
+                    android:textColor="#DC0000"
+                    android:textSize="13sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:id="@+id/total"
+            android:text="Total:"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/saveSalary"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_bg"
+            android:inputType="number"
+            android:text="Save Salary"
+            android:textColor="#fff" />
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -35,7 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    CardView services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, customOrder, chats;
+    CardView services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, customOrder, chats,accounts;
     DatabaseReference mDatabase;
     private ArrayList<String> itemList = new ArrayList();
     private ArrayList<ServiceModel> servicesList = new ArrayList<>();
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         services = findViewById(R.id.services);
         customers = findViewById(R.id.customers);
         bills = findViewById(R.id.bills);
+        accounts = findViewById(R.id.accounts);
         orders = findViewById(R.id.orders);
         notifications = findViewById(R.id.notifications);
         settings = findViewById(R.id.settings);
@@ -57,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
         coupons = findViewById(R.id.coupons);
         timeslots = findViewById(R.id.timeslots);
         customOrder = findViewById(R.id.customOrder);
+        accounts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,AccountsScreen.class));
+            }
+        });
 
 
         chats.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("Admin").child("fcmKey").setValue(FirebaseInstanceId.getInstance().getToken());
+//        mDatabase.child("Admin").child("fcmKey").setValue(FirebaseInstanceId.getInstance().getToken());
 
         serviceMen.setOnClickListener(new View.OnClickListener() {
             @Override

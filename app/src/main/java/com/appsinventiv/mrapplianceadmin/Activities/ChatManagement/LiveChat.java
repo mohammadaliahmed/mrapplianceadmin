@@ -11,6 +11,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -347,7 +349,7 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        StorageReference riversRef = mStorageRef.child("Documents").child(imgName);
+        final StorageReference riversRef = mStorageRef.child("Documents").child(imgName);
 
         riversRef.putFile(path)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -355,12 +357,22 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-                        sendMessageToServer(Constants.MESSAGE_TYPE_DOCUMENT, "" + downloadUrl, getMimeType(LiveChat.this, path));
+                        riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                String downloadUrl = task.getResult().toString();
+                                sendMessageToServer(Constants.MESSAGE_TYPE_DOCUMENT, "" + downloadUrl, getMimeType(LiveChat.this, path));
 //                        mDatabase.child("Media").push().setValue()
-                        String k = mDatabase.push().getKey();
+                                String k = mDatabase.push().getKey();
 //                        mDatabase.child("Documents").child(k).setValue(new MediaModel(k, Constants.MESSAGE_TYPE_DOCUMENT, "" + downloadUrl, System.currentTimeMillis()));
+                            }
+                        });
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//
+//                        sendMessageToServer(Constants.MESSAGE_TYPE_DOCUMENT, "" + downloadUrl, getMimeType(LiveChat.this, path));
+////                        mDatabase.child("Media").push().setValue()
+//                        String k = mDatabase.push().getKey();
+////                        mDatabase.child("Documents").child(k).setValue(new MediaModel(k, Constants.MESSAGE_TYPE_DOCUMENT, "" + downloadUrl, System.currentTimeMillis()));
 
                     }
                 })
@@ -393,11 +405,11 @@ public class LiveChat extends AppCompatActivity implements NotificationObserver 
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-                        sendMessageToServer(Constants.MESSAGE_TYPE_IMAGE, "" + downloadUrl, getMimeType(LiveChat.this, file));
-//                        mDatabase.child("Media").push().setValue()
-                        String k = mDatabase.push().getKey();
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//
+//                        sendMessageToServer(Constants.MESSAGE_TYPE_IMAGE, "" + downloadUrl, getMimeType(LiveChat.this, file));
+////                        mDatabase.child("Media").push().setValue()
+//                        String k = mDatabase.push().getKey();
 //                        mDatabase.child("Images").child(k).setValue(new MediaModel(k, Constants.MESSAGE_TYPE_IMAGE, "" + downloadUrl, System.currentTimeMillis()));
 
                     }

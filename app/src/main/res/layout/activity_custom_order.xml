@@ -45,8 +45,8 @@
                         android:layout_margin="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
                             android:id="@+id/name"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Name"
                             android:inputType="textCapWords" />
@@ -58,9 +58,9 @@
                         android:layout_margin="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/phone"
                             android:hint="Phone"
                             android:inputType="phone" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -71,15 +71,52 @@
                         android:layout_margin="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Address"
-                            android:id="@+id/address"
                             android:inputType="textCapWords" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="5dp">
+
+                <RelativeLayout
+
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:id="@+id/chooseLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:id="@+id/addresss"
+                        android:text="Choose Address"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_view" />
+                </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -114,22 +151,22 @@
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/residential"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/residential"
                             android:layout_margin="8dp"
                             android:text="Residential" />
 
                         <RadioButton
-                            android:layout_width="wrap_content"
                             android:id="@+id/commercial"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:text="Commercial" />
 
                         <RadioButton
-                            android:layout_width="wrap_content"
                             android:id="@+id/villa"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:text="Villa" />
@@ -237,12 +274,12 @@
                     </RelativeLayout>
 
                     <Button
+                        android:id="@+id/createOrder"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="20dp"
                         android:background="@drawable/btn_bg"
-                        android:id="@+id/createOrder"
                         android:inputType="text"
                         android:text="Create Order"
                         android:textColor="#fff" />

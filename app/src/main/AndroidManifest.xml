@@ -2,17 +2,42 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.appsinventiv.mrapplianceadmin">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
-        android:name="com.appsinventiv.mrapplianceadmin.ApplicationClass"
+        android:name=".ApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.MainActivity"
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".Activities.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+        <activity
+            android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,20 +45,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Services.AddService"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Services.ListOfServices"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Services.AddSubService"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Services.ListOfSubServices"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.TimeSlotManagement.TimeSlotList"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Coupons.ListOfCoupons"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Customers.ListOfCustomers"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Customers.ViewCustomer"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Coupons.AddCoupon"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Orders.Orders"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Orders.ViewOrder">
+        <activity
+            android:name=".Services.AddService"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Services.ListOfServices" />
+        <activity
+            android:name=".Services.AddSubService"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Services.ListOfSubServices" />
+        <activity android:name=".Activities.TimeSlotManagement.TimeSlotList" />
+        <activity android:name=".Activities.Coupons.ListOfCoupons" />
+        <activity android:name=".Activities.Customers.ListOfCustomers" />
+        <activity android:name=".Activities.Customers.ViewCustomer" />
+        <activity
+            android:name=".Activities.Coupons.AddCoupon"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Activities.Orders.Orders" />
+        <activity android:name=".Activities.Orders.ViewOrder">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,45 +74,51 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.ViewInvoice"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.ListOfBills"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.ViewServicePictures"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Orders.ModifyOrder"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.ExportOrders"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.AppSettings"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.PicturesSlider"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Servicemen.ListOfServicemen"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Servicemen.AddServicemen"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.ChangePolicy"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Notifications.SendNotification" />
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Notifications.NotificationHistory" />
-        <activity android:name="com.appsinventiv.mrapplianceadmin.Activities.Reports.ReportsActivity" />
+        <activity
+            android:name=".Activities.ViewInvoice"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.ListOfBills" />
+        <activity android:name=".Activities.ViewServicePictures" />
+        <activity android:name=".Activities.Orders.ModifyOrder" />
+        <activity
+            android:name=".Activities.ExportOrders"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.AppSettings"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Activities.PicturesSlider"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Servicemen.ListOfServicemen" />
+        <activity
+            android:name=".Servicemen.AddServicemen"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ChangePolicy"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Notifications.SendNotification" />
+        <activity android:name=".Notifications.NotificationHistory" />
+        <activity android:name=".Activities.Reports.ReportsActivity" />
         <activity android:name=".Activities.OrderLogs.SolutionTracking" />
-        <activity android:name=".Activities.ViewQuotation"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activities.ViewQuotation"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.CustomOrder.CustomOrderActivity" />
         <activity android:name=".Activities.ChatManagement.ListOfChats" />
         <activity android:name=".Activities.ChatManagement.LiveChat" />
+        <activity android:name=".Activities.ExpensesList" />
+        <activity android:name=".Activities.GPSTrackerActivity" />
+        <activity android:name=".Activities.AccountsScreen" />
+        <activity android:name=".Activities.Salaries.SalariesList" />
 
-        <service android:name="com.appsinventiv.mrapplianceadmin.Utils.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name="com.appsinventiv.mrapplianceadmin.Utils.MyFirebaseMessagingService">
+        <service android:name=".Utils.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <provider
-            android:name="com.appsinventiv.mrapplianceadmin.provider.GenericFileProvider"
+            android:name=".provider.GenericFileProvider"
             android:authorities="com.appsinventiv.mrapplianceadmin.provider"
             android:exported="false"
             android:grantUriPermissions="true">
