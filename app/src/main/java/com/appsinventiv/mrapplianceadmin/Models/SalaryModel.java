@@ -2,18 +2,23 @@ package com.appsinventiv.mrapplianceadmin.Models;
 
 import com.appsinventiv.mrapplianceadmin.Servicemen.ServicemanModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SalaryModel {
     String id;
-    int amount;
-    int deduction;
+    int grossSalary;
     int total;
     int day, month, year;
     ServicemanModel serviceman;
+    ArrayList<SalaryItemModel> deductions;
+    ArrayList<SalaryItemModel> allowances;
 
-    public SalaryModel(String id, int amount, int deduction, int total, int day, int month, int year, ServicemanModel serviceman) {
+    public SalaryModel(String id, int grossSalary, ArrayList<SalaryItemModel> allowances, ArrayList<SalaryItemModel> deductions , int total, int day, int month, int year, ServicemanModel serviceman) {
         this.id = id;
-        this.amount = amount;
-        this.deduction = deduction;
+        this.grossSalary = grossSalary;
+        this.allowances = allowances;
+        this.deductions = deductions;
         this.total = total;
         this.day = day;
         this.month = month;
@@ -24,6 +29,30 @@ public class SalaryModel {
     public SalaryModel() {
     }
 
+    public int getGrossSalary() {
+        return grossSalary;
+    }
+
+    public void setGrossSalary(int grossSalary) {
+        this.grossSalary = grossSalary;
+    }
+
+    public ArrayList<SalaryItemModel> getDeductions() {
+        return deductions;
+    }
+
+    public void setDeductions(ArrayList<SalaryItemModel> deductions) {
+        this.deductions = deductions;
+    }
+
+    public ArrayList<SalaryItemModel> getAllowances() {
+        return allowances;
+    }
+
+    public void setAllowances(ArrayList<SalaryItemModel> allowances) {
+        this.allowances = allowances;
+    }
+
     public String getId() {
         return id;
     }
@@ -32,21 +61,6 @@ public class SalaryModel {
         this.id = id;
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getDeduction() {
-        return deduction;
-    }
-
-    public void setDeduction(int deduction) {
-        this.deduction = deduction;
-    }
 
     public int getTotal() {
         return total;

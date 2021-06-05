@@ -1,6 +1,7 @@
 package com.appsinventiv.mrapplianceadmin.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appsinventiv.mrapplianceadmin.Activities.Salaries.ViewSalary;
 import com.appsinventiv.mrapplianceadmin.Models.ExpensesModel;
 import com.appsinventiv.mrapplianceadmin.Models.SalaryModel;
 import com.appsinventiv.mrapplianceadmin.R;
@@ -45,9 +47,7 @@ public class SalariesListAdapter extends RecyclerView.Adapter<SalariesListAdapte
         final SalaryModel model = itemList.get(position);
         holder.serial.setText((position + 1) + ")");
         holder.name.setText("Name: " + model.getServiceman().getName());
-        holder.amount.setText("AED " + model.getAmount());
-        holder.deduction.setText("AED " + model.getDeduction());
-        holder.total.setText("AED " + model.getTotal());
+        holder.total.setText("   Total Salary: AED " + model.getTotal());
         holder.date.setText(model.getDay() + "/" + model.getMonth() + "/" + model.getYear());
 
 
@@ -57,6 +57,14 @@ public class SalariesListAdapter extends RecyclerView.Adapter<SalariesListAdapte
                 callback.onDelete(model);
                 return false;
 
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(context, ViewSalary.class);
+                i.putExtra("salaryId",model.getId());
+                context.startActivity(i);
             }
         });
 
@@ -74,9 +82,7 @@ public class SalariesListAdapter extends RecyclerView.Adapter<SalariesListAdapte
             super(itemView);
             name = itemView.findViewById(R.id.name);
             date = itemView.findViewById(R.id.date);
-            amount = itemView.findViewById(R.id.amount);
             serial = itemView.findViewById(R.id.serial);
-            deduction = itemView.findViewById(R.id.deduction);
             total = itemView.findViewById(R.id.total);
 
 

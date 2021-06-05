@@ -8,4 +8,13 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="50dp"
+        android:src="@drawable/ic_add"
+        android:layout_alignParentRight="true"
+        android:id="@+id/addExpense"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_height="50dp"/>
+
 </RelativeLayout>

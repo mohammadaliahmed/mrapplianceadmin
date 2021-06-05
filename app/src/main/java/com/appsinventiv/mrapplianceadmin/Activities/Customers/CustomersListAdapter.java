@@ -2,8 +2,10 @@ package com.appsinventiv.mrapplianceadmin.Activities.Customers;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,51 @@ import com.appsinventiv.mrapplianceadmin.Models.User;
 import com.appsinventiv.mrapplianceadmin.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomersListAdapter extends RecyclerView.Adapter<CustomersListAdapter.ViewHolder> {
     Context context;
     ArrayList<User> itemlist;
+    private ArrayList<User> arrayList;
 
     public CustomersListAdapter(Context context, ArrayList<User> itemlist) {
         this.context = context;
         this.itemlist = itemlist;
+        this.arrayList = new ArrayList<>(itemlist);
+
+    }
+
+    public void updateList(ArrayList<User> itemlist) {
+        this.itemlist = itemlist;
+        arrayList.clear();
+        arrayList.addAll(itemlist);
+        notifyDataSetChanged();
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        itemlist.clear();
+        if (charText.length() == 0) {
+            itemlist.addAll(arrayList);
+        } else {
+            for (User product : arrayList) {
+                try {
+                    if (product.getFullName().toLowerCase().startsWith(charText) ||
+                            product.getPhone().toLowerCase().contains(charText) ||
+                            product.getMobile().toLowerCase().contains(charText)
+                    ) {
+                        itemlist.add(product);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+
+
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull

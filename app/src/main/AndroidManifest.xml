@@ -110,6 +110,8 @@
         <activity android:name=".Activities.GPSTrackerActivity" />
         <activity android:name=".Activities.AccountsScreen" />
         <activity android:name=".Activities.Salaries.SalariesList" />
+        <activity android:name=".Activities.Salaries.AddSalary" />
+        <activity android:name=".Activities.Salaries.ViewSalary" />
 
         <service android:name=".Utils.MyFirebaseMessagingService">
             <intent-filter>

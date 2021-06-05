@@ -1,15 +1,26 @@
 package com.appsinventiv.mrapplianceadmin.Activities;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,12 +42,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ExpensesList extends AppCompatActivity {
     RecyclerView recycler;
-    ImageView addExpense;
     DatabaseReference mDatabase;
     ExpensesListAdapter adapter;
+    ImageView addExpense;
 
     private ArrayList<ExpensesModel> itemList = new ArrayList<>();
 
@@ -50,6 +62,7 @@ public class ExpensesList extends AppCompatActivity {
             getSupportActionBar().setElevation(0);
         }
         this.setTitle("Expenses");
+        addExpense = findViewById(R.id.addExpense);
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         adapter = new ExpensesListAdapter(this, itemList, new ExpensesListAdapter.ExpensesItemAdapterCallback() {
@@ -69,12 +82,132 @@ public class ExpensesList extends AppCompatActivity {
             }
         });
         recycler.setAdapter(adapter);
+        addExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shwoExpenseAlert();
+            }
+        });
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         getDataFromServer();
     }
+
+    private void shwoExpenseAlert() {
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = layoutInflater.inflate(R.layout.alert_dialog_add_expenses, null);
+
+        dialog.setContentView(layout);
+
+        Button saveExpense = layout.findViewById(R.id.saveExpense);
+        final EditText title = layout.findViewById(R.id.title);
+        final EditText description = layout.findViewById(R.id.description);
+        final EditText amount = layout.findViewById(R.id.amount);
+        final TextView pickDate = layout.findViewById(R.id.pickDate);
+        Spinner spinner = layout.findViewById(R.id.spinner);
+        final String[] categorySelected = {""};
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        final Calendar c = Calendar.getInstance();
+        final int mYear = c.get(Calendar.YEAR);
+        final int mMonth = c.get(Calendar.MONTH);
+        final int mDay = c.get(Calendar.DAY_OF_MONTH);
+        final String[] dateSelected = {""};
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ExpensesList.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                dateSelected[0] = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                pickDate.setText(dateSelected[0]);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+
+        });
+
+        final ArrayList<String> items = new ArrayList<>();
+
+        items.add("Select Category");
+        items.add("Food");
+        items.add("Fuel");
+        items.add("Traveling");
+        items.add("Stationary");
+        items.add("Bill");
+
+
+        final ArrayAdapter<String> adaptera = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adaptera);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                categorySelected[0] = items.get(i);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        saveExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (title.getText().length() == 0) {
+                    title.setError("Enter title");
+                } else if (description.getText().length() == 0) {
+                    description.setError("Enter description");
+                } else if (amount.getText().length() == 0) {
+                    amount.setError("Enter title");
+                } else if (dateSelected[0].equalsIgnoreCase("")) {
+                    CommonUtils.showToast("Select date");
+                } else if (categorySelected[0].equalsIgnoreCase("Select Category")) {
+                    CommonUtils.showToast("Select category");
+                } else {
+                    String key = mDatabase.push().getKey();
+                    ExpensesModel model = new ExpensesModel(key,
+                            title.getText().toString(),
+                            description.getText().toString(),
+                            categorySelected[0],
+                            dateSelected[0],
+                            "Approved",
+                            "Admin",
+                            Integer.parseInt(amount.getText().toString())
+                    );
+                    mDatabase.child("Expenses").child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            CommonUtils.showToast("Expense added");
+                            dialog.cancel();
+                        }
+                    });
+                }
+            }
+        });
+
+
+        dialog.show();
+    }
+
 
     private void getDataFromServer() {
         mDatabase.child("Expenses").addValueEventListener(new ValueEventListener() {

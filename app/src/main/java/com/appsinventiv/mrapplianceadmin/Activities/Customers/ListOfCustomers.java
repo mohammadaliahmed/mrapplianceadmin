@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 
 import com.appsinventiv.mrapplianceadmin.Activities.MainActivity;
 import com.appsinventiv.mrapplianceadmin.Models.OrderModel;
@@ -41,6 +46,7 @@ public class ListOfCustomers extends AppCompatActivity {
     HashMap<String, OrderModel> ordersMap = new HashMap<>();
     HashMap<String, User> userMap = new HashMap<>();
     private String csv;
+    EditText search;
 
 
     @Override
@@ -50,15 +56,33 @@ public class ListOfCustomers extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Customers");
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        search = findViewById(R.id.search);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new CustomersListAdapter(this, itemList);
         recyclerView.setAdapter(adapter);
         getDataFromDB();
         getOrderDetailsFromDB();
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.filter(s.toString());
+            }
+        });
 
     }
 
@@ -89,7 +113,7 @@ public class ListOfCustomers extends AppCompatActivity {
                             return ob1.compareTo(ob2);
                         }
                     });
-                    adapter.notifyDataSetChanged();
+                    adapter.updateList(itemList);
                 } else {
                     itemList.clear();
                     adapter.notifyDataSetChanged();
@@ -167,7 +191,7 @@ public class ListOfCustomers extends AppCompatActivity {
             writer = new CSVWriter(new FileWriter(csv));
 
             List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"Serial #", "Username", "Name", "Phone","Joined", "Address", "Google Address", "Total services booked",
+            data.add(new String[]{"Serial #", "Username", "Name", "Phone", "Joined", "Address", "Google Address", "Total services booked",
                     "Total Payment"});
             int serial = 0;
             for (User model : itemList) {

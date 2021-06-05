@@ -105,7 +105,8 @@ public class SalariesList extends AppCompatActivity {
         addSalary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSalaryDilog();
+//                showSalaryDilog();
+                startActivity(new Intent(SalariesList.this,AddSalary.class));
             }
         });
         adapter = new SalariesListAdapter(this, itemList, new SalariesListAdapter.SalaryItemAdapterCallback() {
@@ -305,19 +306,19 @@ public class SalariesList extends AppCompatActivity {
                 } else {
                     String key = mDatabase.push().getKey();
                     int total = Integer.parseInt(amount.getText().toString()) - Integer.parseInt(deduction.getText().toString());
-                    SalaryModel model = new SalaryModel(key,
-                            Integer.parseInt(amount.getText().toString()),
-                            Integer.parseInt(deduction.getText().toString()),
-                            total,
-                            mDay, mMonth + 1, mYear, staffChosen
-                    );
-                    mDatabase.child("Salaries").child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            CommonUtils.showToast("Salary Added");
-                            dialog.cancel();
-                        }
-                    });
+//                    SalaryModel model = new SalaryModel(key,
+//                            Integer.parseInt(amount.getText().toString()),
+//                            Integer.parseInt(deduction.getText().toString()),
+//                            total,
+//                            mDay, mMonth + 1, mYear, staffChosen
+//                    );
+//                    mDatabase.child("Salaries").child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            CommonUtils.showToast("Salary Added");
+//                            dialog.cancel();
+//                        }
+//                    });
                 }
             }
         });
