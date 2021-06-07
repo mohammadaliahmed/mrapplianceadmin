@@ -49,7 +49,7 @@ public class CommonUtils {
         smsTime.setTimeInMillis(smsTimeInMilis);
 
 
-        return DateFormat.format("dd MMM yyy", smsTime).toString();
+        return DateFormat.format("d/M/yyy", smsTime).toString();
 
     }
     public static String getFullAddress(Context context, Double lat, Double lon) {

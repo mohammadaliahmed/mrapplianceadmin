@@ -1,6 +1,7 @@
 package com.appsinventiv.mrapplianceadmin.Activities.Orders;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 import com.appsinventiv.mrapplianceadmin.Models.LogsModel;
@@ -32,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -45,6 +49,10 @@ public class OrdersFragment extends Fragment {
     String orderStatus;
     OrdersAdapter adapter;
     DatabaseReference mDatabase;
+    TextView chooseDate;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -70,6 +78,7 @@ public class OrdersFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         View rootView = inflater.inflate(R.layout.fragment_orders, container, false);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_orders);
+        chooseDate = rootView.findViewById(R.id.chooseDate);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new OrdersAdapter(context, arrayList, new OrdersAdapter.ChangeStatus() {
@@ -89,7 +98,32 @@ public class OrdersFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        chooseDate.setText("Pick Date: " + mDay + "/" + (mMonth+1) + "/" + mYear);
+        chooseDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                chooseDate.setText("Pick Date: " + dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+
+            }
+        });
         return rootView;
 
 

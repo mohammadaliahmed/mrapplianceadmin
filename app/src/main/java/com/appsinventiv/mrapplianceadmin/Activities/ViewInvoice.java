@@ -40,7 +40,7 @@ public class ViewInvoice extends AppCompatActivity {
     TextView total;
     TextView billTo, invoiceIdTv;
     String invoiceId;
-    TextView paid, balance;
+    TextView paid, balance,companyDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +60,30 @@ public class ViewInvoice extends AppCompatActivity {
         billTo = findViewById(R.id.billTo);
         balance = findViewById(R.id.balance);
         paid = findViewById(R.id.paid);
+        companyDetails = findViewById(R.id.companyDetails);
         total = findViewById(R.id.total);
         recycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         adapter = new PreviewInvoiceAdapter(this, itemList);
         recycler.setAdapter(adapter);
 
         getDataFromServer();
+        getAddressFromDb();
+    }
+    private void getAddressFromDb() {
+        mDatabase.child("Admin").child("address").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    String addd = dataSnapshot.getValue(String.class);
+                    companyDetails.setText("From: \n" + addd);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getDataFromServer() {

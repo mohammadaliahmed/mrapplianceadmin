@@ -1,7 +1,7 @@
 package com.appsinventiv.mrapplianceadmin.Models;
 
 public class AdminModel {
-    String adminNumber,fcmKey,providingServiceInCities,jobs;
+    String adminNumber,fcmKey,providingServiceInCities,jobs,address;
     int tax;
 
     public AdminModel() {
@@ -9,6 +9,14 @@ public class AdminModel {
 
     public String getJobs() {
         return jobs;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setJobs(String jobs) {

@@ -27,12 +27,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
-                android:text="From\n
-Mr. Appliance\n
-Service Center #2, Albade building ahmeri,Dubai\n
-043700033, 0556363186\n
-https://mrappliance.com\n
-services@mrappliance.info"
+                android:text=""
                 android:textColor="#000"
                 android:textSize="11sp" />
 

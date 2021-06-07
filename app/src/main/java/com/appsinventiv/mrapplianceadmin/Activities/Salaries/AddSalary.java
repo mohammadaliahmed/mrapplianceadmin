@@ -181,6 +181,9 @@ public class AddSalary extends AppCompatActivity {
         saveSalary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(staffChosen.getName()==null){
+                    CommonUtils.showToast("Please select staff member");
+                }else
                 if (grossSalary.getText().length() < 2) {
                     CommonUtils.showToast("Enter gross salary");
                 } else if (!datePicked) {
@@ -208,7 +211,7 @@ public class AddSalary extends AppCompatActivity {
                         allowancesList,
                         deductionList,
                         totalSalary,
-                        mDay, mMonth, mYear, staffChosen
+                        mDay, mMonth, mYear, staffChosen,"Pending"
                 );
                 mDatabase.child("Salaries").child(key).setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

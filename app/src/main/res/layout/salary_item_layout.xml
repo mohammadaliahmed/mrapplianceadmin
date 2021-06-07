@@ -23,24 +23,32 @@
         android:text="Siems dishwasher"
         android:textColor="#000" />
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/name"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:text="AED 570"
+        android:textColor="#000"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/salaryStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="AED 570"
-            android:textColor="#000"
-            android:textSize="17sp" />
-    </LinearLayout>
+        android:background="@drawable/black_corners"
+        android:padding="2dp"
+        android:text="Pending"
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/date"

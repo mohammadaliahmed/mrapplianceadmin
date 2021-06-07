@@ -2,7 +2,9 @@ package com.appsinventiv.mrapplianceadmin.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 public class AppSettings extends AppCompatActivity {
     DatabaseReference mDatabase;
 
-    EditText adminNumber, cities, tax,jobs;
-    Button updateNumber, updateCities, updateTax,updateJobs;
+    EditText adminNumber, cities, tax, jobs, address;
+    Button updateNumber, updateCities, updateTax, updateJobs, updateAddress;
 
     Button change;
 
@@ -42,10 +44,28 @@ public class AppSettings extends AppCompatActivity {
         adminNumber = findViewById(R.id.adminNumber);
         tax = findViewById(R.id.tax);
         updateTax = findViewById(R.id.updateTax);
+        address = findViewById(R.id.address);
+        updateAddress = findViewById(R.id.updateAddress);
         change = findViewById(R.id.change);
         jobs = findViewById(R.id.jobs);
         updateJobs = findViewById(R.id.updateJobs);
 
+
+        updateAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (address.getText().length() == 0) {
+                    address.setError("Enter address");
+                } else {
+                    mDatabase.child("Admin").child("address").setValue(address.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            CommonUtils.showToast("Address Added");
+                        }
+                    });
+                }
+            }
+        });
 
 
         updateNumber.setOnClickListener(new View.OnClickListener() {
@@ -129,8 +149,9 @@ public class AppSettings extends AppCompatActivity {
                         if (model != null) {
                             adminNumber.setText(model.getAdminNumber());
                             jobs.setText(model.getJobs());
+                            address.setText(model.getAddress());
                             cities.setText(model.getProvidingServiceInCities());
-                            tax.setText(""+model.getTax());
+                            tax.setText("" + model.getTax());
                         }
                     }
                 }

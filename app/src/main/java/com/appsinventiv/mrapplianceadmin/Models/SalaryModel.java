@@ -13,11 +13,14 @@ public class SalaryModel {
     ServicemanModel serviceman;
     ArrayList<SalaryItemModel> deductions;
     ArrayList<SalaryItemModel> allowances;
+    String status;
 
-    public SalaryModel(String id, int grossSalary, ArrayList<SalaryItemModel> allowances, ArrayList<SalaryItemModel> deductions , int total, int day, int month, int year, ServicemanModel serviceman) {
+    public SalaryModel(String id, int grossSalary, ArrayList<SalaryItemModel> allowances, ArrayList<SalaryItemModel> deductions , int total, int day, int month, int year, ServicemanModel serviceman,
+                       String status) {
         this.id = id;
         this.grossSalary = grossSalary;
         this.allowances = allowances;
+        this.status = status;
         this.deductions = deductions;
         this.total = total;
         this.day = day;
@@ -27,6 +30,14 @@ public class SalaryModel {
     }
 
     public SalaryModel() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public int getGrossSalary() {

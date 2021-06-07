@@ -35,6 +35,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
         this.changeStatus = changeStatus;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -76,7 +77,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
             });
 
             holder.orderDetails.setText("Service Id: " + model.getOrderId()
-                    + "\n\nService Time: " + CommonUtils.getFormattedDate(model.getTime())
+                    + "\n\nService Time: " + CommonUtils.getDateOnly(model.getTime())
                     + "\n\nService Status: " + model.getOrderStatus()
                     + "\n\nService Items: " + model.getCountModelArrayList().
 

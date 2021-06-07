@@ -47,6 +47,7 @@ public class SalariesListAdapter extends RecyclerView.Adapter<SalariesListAdapte
         final SalaryModel model = itemList.get(position);
         holder.serial.setText((position + 1) + ")");
         holder.name.setText("Name: " + model.getServiceman().getName());
+        holder.salaryStatus.setText("" + model.getStatus());
         holder.total.setText("   Total Salary: AED " + model.getTotal());
         holder.date.setText(model.getDay() + "/" + model.getMonth() + "/" + model.getYear());
 
@@ -76,12 +77,13 @@ public class SalariesListAdapter extends RecyclerView.Adapter<SalariesListAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, amount, date, serial, deduction, total;
+        TextView name, amount, date, serial, deduction, total,salaryStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             date = itemView.findViewById(R.id.date);
+            salaryStatus = itemView.findViewById(R.id.salaryStatus);
             serial = itemView.findViewById(R.id.serial);
             total = itemView.findViewById(R.id.total);
 
