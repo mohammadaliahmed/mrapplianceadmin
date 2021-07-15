@@ -1,18 +1,22 @@
 package com.appsinventiv.mrapplianceadmin.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.appsinventiv.mrapplianceadmin.Activities.PicturesSlider;
 import com.appsinventiv.mrapplianceadmin.Models.ExpensesModel;
 import com.appsinventiv.mrapplianceadmin.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -58,6 +62,25 @@ public class ExpensesListAdapter extends RecyclerView.Adapter<ExpensesListAdapte
 
             }
         });
+        if (model.getImgUrl() != null) {
+            Glide.with(context).load(model.getImgUrl()).into(holder.receipt);
+            holder.receipt.setVisibility(View.VISIBLE);
+
+
+        } else {
+            holder.receipt.setVisibility(View.GONE);
+        }
+        holder.receipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, PicturesSlider.class);
+                ArrayList<String> picList = new ArrayList<>();
+                picList.add(model.getImgUrl());
+                i.putExtra("list", picList);
+                i.putExtra("position", 0);
+                context.startActivity(i);
+            }
+        });
         holder.approve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +103,7 @@ public class ExpensesListAdapter extends RecyclerView.Adapter<ExpensesListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         Button approve, reject;
         TextView title, status, amount, date, serial, description;
+        ImageView receipt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,6 +114,7 @@ public class ExpensesListAdapter extends RecyclerView.Adapter<ExpensesListAdapte
             title = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             approve = itemView.findViewById(R.id.approve);
+            receipt = itemView.findViewById(R.id.receipt);
             reject = itemView.findViewById(R.id.reject);
 
         }

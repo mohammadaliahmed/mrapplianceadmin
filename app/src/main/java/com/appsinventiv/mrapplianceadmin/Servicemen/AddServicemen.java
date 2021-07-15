@@ -1,5 +1,6 @@
 package com.appsinventiv.mrapplianceadmin.Servicemen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -21,12 +22,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.appsinventiv.mrapplianceadmin.Activities.Appointments.AppointmentList;
+import com.appsinventiv.mrapplianceadmin.Services.AddService;
 import com.bumptech.glide.Glide;
 import com.appsinventiv.mrapplianceadmin.R;
 import com.appsinventiv.mrapplianceadmin.Utils.CommonUtils;
 import com.appsinventiv.mrapplianceadmin.Utils.CompressImage;
-import com.appsinventiv.mrapplianceadmin.Utils.GifSizeFilter;
+import com.fxn.pix.Options;
+import com.fxn.pix.Pix;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,10 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
-import com.zhihu.matisse.filter.Filter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddServicemen extends AppCompatActivity {
     private static final int REQUEST_CODE_CHOOSE = 23;
     Button update;
-    EditText servicemanName, username, password, mobile, age, eid;
+    EditText servicemanName, username, password, mobile, age, eid, skills, salary;
     Spinner spinner;
     DatabaseReference mDatabase;
-    List<Uri> mSelected = new ArrayList<>();
+    ArrayList<String> mSelected = new ArrayList<>();
     ArrayList<String> imageUrl = new ArrayList<>();
     StorageReference mStorageRef;
 
@@ -67,6 +68,9 @@ public class AddServicemen extends AppCompatActivity {
     RelativeLayout wholeLayout;
     String role;
     List<String> list = new ArrayList<>();
+    private String downloadUrl = "";
+    TextView currentRole;
+    Button viewAppointments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,7 @@ public class AddServicemen extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Add Serviceman");
         getPermissions();
@@ -86,13 +91,17 @@ public class AddServicemen extends AppCompatActivity {
 
         servicemanImage = findViewById(R.id.servicemanImage);
         wholeLayout = findViewById(R.id.wholeLayout);
+        viewAppointments = findViewById(R.id.viewAppointments);
         servicemanName = findViewById(R.id.servicemanName);
         username = findViewById(R.id.username);
+        currentRole = findViewById(R.id.currentRole);
         password = findViewById(R.id.password);
         spinner = findViewById(R.id.spinner);
         mobile = findViewById(R.id.mobile);
         age = findViewById(R.id.age);
         eid = findViewById(R.id.eid);
+        skills = findViewById(R.id.skills);
+        salary = findViewById(R.id.salary);
 
 
         servicemanImage.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +111,12 @@ public class AddServicemen extends AppCompatActivity {
             }
         });
 
+        viewAppointments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AddServicemen.this, AppointmentList.class));
+            }
+        });
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,12 +132,21 @@ public class AddServicemen extends AppCompatActivity {
                     age.setError("Enter age");
                 } else if (eid.getText().toString().trim().isEmpty()) {
                     eid.setError("Enter EID");
+                } else if (salary.getText().toString().trim().isEmpty()) {
+                    salary.setError("Enter salary");
                 } else if (role == null) {
                     CommonUtils.showToast("Select Role");
                 } else {
 
                     if (id != null) {
-                        updateDataToDB();
+                        if (imageUrl.size() > 0) {
+                            putPictures(imageUrl.get(0));
+                        } else {
+                            CommonUtils.showToast("Updated");
+                            updateDataToDB();
+                            wholeLayout.setVisibility(View.GONE);
+                        }
+
                     } else {
                         id = username.getText().toString();
                         sendDataToDB();
@@ -188,8 +212,11 @@ public class AddServicemen extends AppCompatActivity {
         map.put("password", password.getText().toString());
         map.put("mobile", mobile.getText().toString());
         map.put("age", Integer.parseInt(age.getText().toString()));
+        map.put("imageUrl", downloadUrl);
         map.put("eid", Long.parseLong(eid.getText().toString()));
         map.put("role", role);
+        map.put("salary", Integer.parseInt(salary.getText().toString()));
+        map.put("skills", skills.getText().toString());
 
         mDatabase.child("Servicemen").child(id).updateChildren(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -213,9 +240,15 @@ public class AddServicemen extends AppCompatActivity {
                         username.setEnabled(false);
                         password.setText("" + model.getPassword());
                         mobile.setText(model.getMobile());
+                        salary.setText("" + model.getSalary());
+                        skills.setText("" + model.getSkills());
+                        downloadUrl = model.getImageUrl();
+                        currentRole.setVisibility(View.VISIBLE);
+                        currentRole.setText("Current Role: " + model.getRole());
+                        mobile.setText(model.getMobile());
                         age.setText("" + model.getAge());
                         eid.setText("" + model.getCnic());
-                        Glide.with(AddServicemen.this).load(model.getImageUrl()).into(servicemanImage);
+                        Glide.with(AddServicemen.this).load(model.getImageUrl()).placeholder(R.drawable.upload_photo).into(servicemanImage);
                     }
                 }
             }
@@ -239,7 +272,9 @@ public class AddServicemen extends AppCompatActivity {
                 true, false,
                 Integer.parseInt(age.getText().toString()),
                 Long.parseLong(eid.getText().toString()),
-                ""
+                "",
+                Integer.parseInt(salary.getText().toString()),
+                skills.getText().toString()
 
         );
         mDatabase.child("Servicemen").child(id).setValue(model)
@@ -262,34 +297,35 @@ public class AddServicemen extends AppCompatActivity {
     private void initMatisse() {
         mSelected.clear();
         imageUrl.clear();
-        Matisse.from(AddServicemen.this)
-                .choose(MimeType.allOf())
-                .countable(true)
-                .maxSelectable(1)
-                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .imageEngine(new GlideEngine())
-                .forResult(REQUEST_CODE_CHOOSE);
+        Options options = Options.init()
+                .setRequestCode(100)                                           //Request code for activity results
+                .setCount(1)                                                   //Number of images to restict selection count
+                .setExcludeVideos(true)                                       //Option to exclude videos
+                .setScreenOrientation(Options.SCREEN_ORIENTATION_PORTRAIT)     //Orientaion
+                ;                                       //Custom Path For media Storage
+
+        Pix.start(this, options);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_CHOOSE && data != null) {
-            mSelected = Matisse.obtainResult(data);
-            for (Uri img : mSelected) {
-                imageUrl.add(CompressImage.compressImage("" + img, AddServicemen.this));
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == 100) {
+            mSelected = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            for (String img : mSelected) {
+                CompressImage compressImage = new CompressImage(AddServicemen.this);
+                imageUrl.add(compressImage.compressImage("" + img));
             }
-            Glide.with(this).load(mSelected.get(0)).into(servicemanImage);
+            Glide.with(this).load(mSelected.get(0)).placeholder(R.drawable.upload_photo).into(servicemanImage);
 
         }
 
 
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void putPictures(String path) {
+        CommonUtils.showToast("Uploading img");
         String imgName = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
         final Uri file = Uri.fromFile(new File(path));
@@ -307,16 +343,17 @@ public class AddServicemen extends AppCompatActivity {
                         riversRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                             @Override
                             public void onComplete(@NonNull Task<Uri> task) {
-                                String downloadUrl = task.getResult().toString();
-                                mDatabase.child("Servicemen")
-                                        .child(id)
-                                        .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        CommonUtils.showToast("Updated");
-                                        wholeLayout.setVisibility(View.GONE);
-                                    }
-                                });
+                                downloadUrl = task.getResult().toString();
+                                updateDataToDB();
+//                                mDatabase.child("Servicemen")
+//                                        .child(id)
+//                                        .child("imageUrl").setValue("" + downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        CommonUtils.showToast("Updated");
+//                                        wholeLayout.setVisibility(View.GONE);
+//                                    }
+//                                });
                             }
                         });
 

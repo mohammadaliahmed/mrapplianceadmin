@@ -1,8 +1,9 @@
 package com.appsinventiv.mrapplianceadmin.Models;
 
 public class ExpensesModel {
-    String id, title,description, category,date,status,staffMember;
+    String id, title, description, category, date, status, staffMember;
     int price;
+    String imgUrl;
 
     public ExpensesModel(String id, String title, String description, String category, String date, String status, String staffMember, int price) {
         this.id = id;
@@ -14,8 +15,17 @@ public class ExpensesModel {
         this.staffMember = staffMember;
         this.price = price;
     }
+
     public ExpensesModel() {
 
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public String getId() {

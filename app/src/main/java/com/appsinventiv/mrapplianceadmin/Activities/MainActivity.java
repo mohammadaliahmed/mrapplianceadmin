@@ -3,15 +3,19 @@ package com.appsinventiv.mrapplianceadmin.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
+import androidx.collection.ArraySet;
 
 import android.view.View;
 
+import com.appsinventiv.mrapplianceadmin.Activities.Appointments.AppointmentModel;
+import com.appsinventiv.mrapplianceadmin.Activities.Appointments.NewCalenderView;
 import com.appsinventiv.mrapplianceadmin.Activities.ChatManagement.ListOfChats;
 import com.appsinventiv.mrapplianceadmin.Activities.Coupons.ListOfCoupons;
 import com.appsinventiv.mrapplianceadmin.Activities.CustomOrder.CustomOrderActivity;
@@ -23,6 +27,7 @@ import com.appsinventiv.mrapplianceadmin.R;
 import com.appsinventiv.mrapplianceadmin.Servicemen.ListOfServicemen;
 import com.appsinventiv.mrapplianceadmin.Services.ListOfServices;
 import com.appsinventiv.mrapplianceadmin.Services.ServiceModel;
+import com.appsinventiv.mrapplianceadmin.Utils.CommonUtils;
 import com.appsinventiv.mrapplianceadmin.Utils.SharedPrefs;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,10 +40,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    CardView services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, customOrder, chats,accounts;
+    CardView services, customers, bills, orders, notifications, settings, serviceMen, coupons, timeslots, customOrder, chats, accounts, calender;
     DatabaseReference mDatabase;
     private ArrayList<String> itemList = new ArrayList();
     private ArrayList<ServiceModel> servicesList = new ArrayList<>();
+    public static ArrayList<AppointmentModel> appointmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         services = findViewById(R.id.services);
         customers = findViewById(R.id.customers);
         bills = findViewById(R.id.bills);
+        calender = findViewById(R.id.calender);
         accounts = findViewById(R.id.accounts);
         orders = findViewById(R.id.orders);
         notifications = findViewById(R.id.notifications);
@@ -61,10 +68,21 @@ public class MainActivity extends AppCompatActivity {
         accounts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,AccountsScreen.class));
+                startActivity(new Intent(MainActivity.this, AccountsScreen.class));
             }
         });
 
+        calender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MainActivity.appointmentList.size() > 0) {
+                    startActivity(new Intent(MainActivity.this, NewCalenderView.class));
+
+                } else {
+                    CommonUtils.showToast("Please wait..getting appointments");
+                }
+            }
+        });
 
         chats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +174,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         getServicesFromDB();
+        getDataFromServer();
+    }
+
+    private void getDataFromServer() {
+
+        mDatabase.child("Appointments").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                appointmentList.clear();
+                if (dataSnapshot.getValue() != null) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        AppointmentModel model = snapshot.getValue(AppointmentModel.class);
+                        if (model != null) {
+                            appointmentList.add(model);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showAlert() {

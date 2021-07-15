@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
+import com.appsinventiv.mrapplianceadmin.Activities.Tracking.TrackStaff;
 import com.appsinventiv.mrapplianceadmin.R;
 
 import com.appsinventiv.mrapplianceadmin.Utils.CommonUtils;
@@ -31,6 +33,7 @@ public class ListOfServicemen extends AppCompatActivity {
     ServicemanListAdapter adapter;
     private ArrayList<ServicemanModel> itemList = new ArrayList<>();
     DatabaseReference mDatabase;
+    Button trackStaff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,12 @@ public class ListOfServicemen extends AppCompatActivity {
         setContentView(R.layout.activity_list_servicemen);
         addServicemen = findViewById(R.id.addServicemen);
         recyclerview = findViewById(R.id.recyclerview);
+        trackStaff = findViewById(R.id.trackStaff);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
         this.setTitle("Servicemen");
 
@@ -53,6 +58,12 @@ public class ListOfServicemen extends AppCompatActivity {
                 startActivity(i);
             }
 
+        });
+        trackStaff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListOfServicemen.this, TrackStaff.class));
+            }
         });
 
 

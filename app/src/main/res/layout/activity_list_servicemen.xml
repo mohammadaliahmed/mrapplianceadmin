@@ -7,14 +7,27 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
+        android:layout_above="@id/trackStaff"
         android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <Button
+        android:id="@+id/trackStaff"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+
+        android:background="@drawable/btn_bg"
+        android:text="Track Staff ->"
+        android:textColor="#fff" />
+
     <ImageView
+        android:id="@+id/addServicemen"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/addServicemen"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"

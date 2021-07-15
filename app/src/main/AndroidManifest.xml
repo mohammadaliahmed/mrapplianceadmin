@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".ApplicationClass"
@@ -34,8 +33,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".Activities.Tracking.TrackStaff"
+            android:label="@string/title_activity_track_staff"></activity>
+        <activity
             android:name=".Activities.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -112,6 +114,11 @@
         <activity android:name=".Activities.Salaries.SalariesList" />
         <activity android:name=".Activities.Salaries.AddSalary" />
         <activity android:name=".Activities.Salaries.ViewSalary" />
+        <activity android:name=".Activities.Appointments.NewAppointment" />
+        <activity android:name=".Activities.Appointments.AppointmentList" />
+        <activity android:name=".Activities.Appointments.AppointmentListStatus" />
+        <activity android:name=".Activities.Appointments.WorkHistory" />
+        <activity android:name=".Activities.Appointments.NewCalenderView" />
 
         <service android:name=".Utils.MyFirebaseMessagingService">
             <intent-filter>

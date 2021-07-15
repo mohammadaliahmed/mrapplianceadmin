@@ -43,6 +43,22 @@ public class CommonUtils {
             }
         });
     }
+    public static String getMonthAndYear(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+
+        return DateFormat.format("MMM yyy", smsTime).toString();
+
+    }
+
+    public static String getDayNumber(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMilis);
+
+        return DateFormat.format("dd", smsTime).toString();
+    }
+
 
     public static String getDateOnly(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
